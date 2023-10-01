@@ -41,7 +41,7 @@ export const AuthScreen = () => {
             Неверный логин или пароль. Повторите попытку
           </Text>
         )}
-        <CustomButton onPress={logIn} />
+        <CustomButton text='Войти' onPress={logIn} />
       </View>
     </View>
   );
