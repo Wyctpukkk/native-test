@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { View, Text, StyleSheet } from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { useFontLoader } from '../hooks/useFontLoader.ts';
 
@@ -13,8 +13,8 @@ interface BigSearchBlockProps {
   location: string;
   setLocation: (value: string) => void;
   show: boolean;
-  datePicker: Date;
-  setDateInCalendar: (event: any, selectedDate: Date | undefined) => void;
+  setShow: (value: boolean) => void;
+  setDateInCalendar: (selectedDate: Date | undefined) => void;
   showDatepicker: () => void;
   date: string;
   countDays: number;
@@ -26,7 +26,7 @@ export const BigSearchBlock = ({
   location,
   setLocation,
   show,
-  datePicker,
+  setShow,
   setDateInCalendar,
   showDatepicker,
   date,
@@ -39,9 +39,15 @@ export const BigSearchBlock = ({
   if (!fontsLoaded) {
     return null;
   }
+
+  const hideDatePicker = () => {
+    setShow(false);
+  };
+
   return (
     <View>
       <SignOut />
+
       <View
         className='bg-white rounded-[16px] p-[16px] box-border mt-[24px]'
         // eslint-disable-next-line no-use-before-define
@@ -50,26 +56,28 @@ export const BigSearchBlock = ({
         <Text className='text-[18px] font-["Gotham-bold"] font-[700]'>
           Куда едем?
         </Text>
+
         <CustomInput
           borderBlue
           value={location}
           placeholder='Локация'
           onChange={setLocation}
         />
-        <SafeAreaView>
-          {show && (
-            <DateTimePicker
-              testID='dateTimePicker'
-              value={datePicker}
-              //   mode='data'
-              onChange={setDateInCalendar}
-            />
-          )}
-        </SafeAreaView>
+
+        <View>
+          <DateTimePickerModal
+            isVisible={show}
+            mode='date'
+            onConfirm={setDateInCalendar}
+            onCancel={hideDatePicker}
+          />
+        </View>
+
         <View className='flex flex-row justify-between'>
           <View className='w-[47%]'>
             <CustomDatapicker onPress={showDatepicker} value={date} />
           </View>
+
           <View className='w-[47%]'>
             <CustomInput
               isClock

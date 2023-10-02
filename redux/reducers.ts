@@ -6,7 +6,7 @@ export interface initialProps {
   checkIn: string;
   checkOut: string;
   count: string;
-  favor: [];
+  favor: HotelInfo[];
   user: string;
 }
 

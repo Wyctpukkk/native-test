@@ -6,7 +6,8 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-import { StarRatingForHotelPreview } from '../components/StarRatingForHotelPreview.tsx';
+import { StatusBar } from 'expo-status-bar';
+import { StarRating } from '../components/StarRating.tsx';
 import { useFontLoader } from '../hooks/useFontLoader.ts';
 
 import bed from '../assets/bed.png';
@@ -16,6 +17,7 @@ import back from '../assets/back.png';
 import favorRed from '../assets/favor-red.png';
 import scroll1 from '../assets/scroll1.png';
 import scroll2 from '../assets/scroll2.png';
+
 import { SliderItem } from '../components/SliderItem.tsx';
 
 const sliderData = [
@@ -31,8 +33,10 @@ export const HotelPreview = () => {
   if (!fontsLoaded) {
     return null;
   }
+
   return (
     <ScrollView>
+      <StatusBar />
       <View>
         <View className='w-full h-[237px] rounded-[16px] bg-white overflow-hidden relative flex justify-end'>
           <Image
@@ -48,7 +52,7 @@ export const HotelPreview = () => {
               <Text className='text-[#fff] text-[24px] font-["Gotham-medium"] tracking-[-1px] mb-[12px]'>
                 Moscow Marriott Grand Hotel
               </Text>
-              <StarRatingForHotelPreview rating={4} />
+              <StarRating white rating={2} />
             </View>
           </View>
         </View>

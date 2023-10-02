@@ -25,17 +25,16 @@ const startedValues: StartedValuesInterface = {
   countDays: 1,
 };
 
+const initialDate = new Date();
+
 export const StartScreen = () => {
   const dispatch = useDispatch();
   const [location, setLocation] = useState<string>(startedValues.location);
-  const [date, setDate] = useState<string>(formatDateDot(new Date()));
-  const [checkIn, setCheckIn] = useState<string>(formatDateDash(new Date()));
+  const [date, setDate] = useState<string>(formatDateDot(initialDate));
+  const [checkIn, setCheckIn] = useState<string>(formatDateDash(initialDate));
   const [countDays, setCountDays] = useState<number>(startedValues.countDays);
   const [checkOut, setCheckOut] = useState(dayCount(+countDays, checkIn));
-
-  const [datePicker, setDatePicker] = useState<Date>(new Date());
   const [show, setShow] = useState(false);
-
   const [isResultsLoaded, setIsResultsLoaded] = useState<boolean>(false);
 
   const countDayNumber = (number: string) => {
@@ -46,7 +45,6 @@ export const StartScreen = () => {
   };
 
   // поиск новых отелей
-
   const loadHotels = (
     dispatch: Dispatch,
     location: string,
@@ -64,12 +62,13 @@ export const StartScreen = () => {
     loadHotels(dispatch, location, checkIn, checkOut, countDays);
   }, []);
 
-  const setDateInCalendar = (event: any, selectedDate: Date | undefined) => {
-    const currentDate = selectedDate ?? datePicker;
+  const setDateInCalendar = (selectedDate: Date | undefined) => {
+    if (selectedDate) {
+      setDate(formatDateDot(selectedDate));
+      setCheckIn(formatDateDash(selectedDate));
+      setCheckOut(dayCount(+countDays, formatDateDash(selectedDate)));
+    }
     setShow(false);
-    setDatePicker(currentDate);
-    setDate(formatDateDot(currentDate));
-    setCheckIn(formatDateDash(currentDate));
   };
 
   const showDatepicker = () => {
@@ -102,7 +101,7 @@ export const StartScreen = () => {
             location={location}
             setLocation={setLocation}
             show={show}
-            datePicker={datePicker}
+            setShow={setShow}
             setDateInCalendar={setDateInCalendar}
             showDatepicker={showDatepicker}
             date={date}
