@@ -35,6 +35,11 @@
     "import/no-unresolved": "off",
     "react/require-default-props": "off",
     "react/jsx-one-expression-per-line": "off",
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    "object-curly-newline": "off",
+    "import/no-extraneous-dependencies": "off",
+    "indent": "off",
+    "@typescript-eslint/indent": "off",
+    "react-hooks/exhaustive-deps": "off"
   }
 }

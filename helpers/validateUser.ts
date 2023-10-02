@@ -8,7 +8,7 @@ export const validateUser = (login: string, password: string) => {
   const loginValid = login.toLowerCase().match(regexpEmail);
 
   // Валидация пароля
-  const passValid = password.match(regexpPass);
+  const passValid = password.match(regexpPass) && password.length > 9;
 
   return loginValid && passValid;
 };

@@ -4,6 +4,7 @@ import favorIcon from '../assets/favor.png';
 import previewHotel from '../assets/previewhotel.png';
 import { type HotelInfo } from '../interfaces/apiInterface.ts';
 import StarRating from './StarRating.tsx';
+import { clampString } from '../helpers/clampString.ts';
 
 interface HotelsCartProps {
   hotel: HotelInfo;
@@ -25,7 +26,7 @@ export const HotelsCart = ({ hotel }: HotelsCartProps) => {
         <View className='flex flex-col justify-between h-[57px]'>
           <View className='flex flex-row justify-end items-center'>
             <Text className='text-[17px] font-["Gotham-medium"] font-[500] tracking-[-1.3px]'>
-              {hotel.hotelName}
+              {clampString(hotel.hotelName, 29)}
             </Text>
             <Image className='h-[18px] w-[21px] ml-[10px]' source={favorIcon} />
           </View>

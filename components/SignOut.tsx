@@ -1,8 +1,18 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { useDispatch } from 'react-redux';
+
 import { useFontLoader } from '../hooks/useFontLoader.ts';
 import exitIcon from '../assets/exit.png';
 
 export const SignOut = () => {
+  const dispatch = useDispatch();
+
+  const logOutUser = () => {
+    dispatch({
+      type: 'DEL_USER',
+    });
+  };
+
   const fontsLoaded: boolean = useFontLoader();
 
   if (!fontsLoaded) {
@@ -13,7 +23,13 @@ export const SignOut = () => {
       <Text className='text-[24px] font-["Gotham-bold"] font-[700]'>
         Simple Hotel Check
       </Text>
-      <Image className='h-[24px] w-[24px]' source={exitIcon} />
+      <TouchableOpacity
+        onPress={() => {
+          logOutUser();
+        }}
+      >
+        <Image className='h-[24px] w-[24px]' source={exitIcon} />
+      </TouchableOpacity>
     </View>
   );
 };

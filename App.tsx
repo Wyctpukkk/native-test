@@ -1,7 +1,12 @@
-import { AuthScreen } from './screens/AuthScreen.tsx';
-import { StartScreen } from './screens/StartScreen.tsx';
+import { Provider } from 'react-redux';
+import store from './redux/index.ts';
 
-export default function App(): JSX.Element {
-  // return <AuthScreen />;
-  return <StartScreen />;
+import { NavigationBlock } from './routes/NavigationBlock.tsx';
+
+export default function App() {
+  return (
+    <Provider store={store}>
+      <NavigationBlock />
+    </Provider>
+  );
 }

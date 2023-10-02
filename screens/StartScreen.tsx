@@ -1,116 +1,120 @@
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+/* eslint-disable no-shadow */
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { type Dispatch } from 'redux';
+import { View, ScrollView } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
-import { useState } from 'react';
+import {
+  formatDateDot,
+  formatDateDash,
+  dayCount,
+} from '../helpers/formatDataHelpers.ts';
 
-import { useFontLoader } from '../hooks/useFontLoader.ts';
-
-import { CustomInput } from '../components/CustomInput.tsx';
-import { CustomButton } from '../components/CustomButton.tsx';
-import { CustomDatapicker } from '../components/CustomDatapicker.tsx';
-import { formatDate } from '../helpers/formatDataToInput.ts';
-import { SignOut } from '../components/SignOut.tsx';
 import { HotelsList } from '../components/HotelsList.tsx';
+import { BigSearchBlock } from '../components/BigSearchBlock.tsx';
+import { SmallSearchBlock } from '../components/SmallSearchBlock.tsx';
 
 interface StartedValuesInterface {
   location: string;
-  countDays: string;
+  countDays: number;
 }
 
 const startedValues: StartedValuesInterface = {
   location: 'Москва',
-  countDays: '1',
+  countDays: 1,
 };
 
 export const StartScreen = () => {
+  const dispatch = useDispatch();
   const [location, setLocation] = useState<string>(startedValues.location);
-  const [data, setData] = useState<string>(formatDate(new Date()));
-  const [countDays, setCountDays] = useState<string>(startedValues.countDays);
-  const [datePicker, setDatePicker] = useState(new Date());
+  const [date, setDate] = useState<string>(formatDateDot(new Date()));
+  const [checkIn, setCheckIn] = useState<string>(formatDateDash(new Date()));
+  const [countDays, setCountDays] = useState<number>(startedValues.countDays);
+  const [checkOut, setCheckOut] = useState(dayCount(+countDays, checkIn));
+
+  const [datePicker, setDatePicker] = useState<Date>(new Date());
   const [show, setShow] = useState(false);
 
-  const onChange = (event: any, selectedDate: Date | undefined) => {
+  const [isResultsLoaded, setIsResultsLoaded] = useState<boolean>(false);
+
+  const countDayNumber = (number: string) => {
+    if (number) {
+      setCountDays(+number);
+      setCheckOut(dayCount(+number, checkIn));
+    }
+  };
+
+  // поиск новых отелей
+
+  const loadHotels = (
+    dispatch: Dispatch,
+    location: string,
+    checkIn: string,
+    checkOut: string,
+    countDays: number
+  ): void => {
+    dispatch({
+      type: 'LOAD_HOTELS',
+      payload: { location, checkIn, checkOut, countDays },
+    });
+  };
+
+  useEffect(() => {
+    loadHotels(dispatch, location, checkIn, checkOut, countDays);
+  }, []);
+
+  const setDateInCalendar = (event: any, selectedDate: Date | undefined) => {
     const currentDate = selectedDate ?? datePicker;
     setShow(false);
     setDatePicker(currentDate);
-    setData(formatDate(currentDate));
+    setDate(formatDateDot(currentDate));
+    setCheckIn(formatDateDash(currentDate));
   };
 
   const showDatepicker = () => {
     setShow(true);
   };
 
-  const searchHotels = () => {
-    alert(countDays + data + location);
+  const backToBigSearchBlock = () => {
+    setIsResultsLoaded(false);
   };
 
-  const fontsLoaded: boolean = useFontLoader();
-
-  if (!fontsLoaded) {
-    return null;
-  }
+  const searchHotels = () => {
+    loadHotels(dispatch, location, checkIn, checkOut, countDays);
+    setIsResultsLoaded(true);
+  };
 
   return (
-    <View className='bg-[#F4F4F4] w-full h-full px-[16px] '>
-      <SignOut />
-      <View
-        className='bg-white rounded-[16px] p-[16px] box-border mt-[24px]'
-        // eslint-disable-next-line no-use-before-define
-        style={[styles.boxShadow, styles.androidShadow]}
-      >
-        <Text className='text-[18px] font-["Gotham-bold"] font-[700]'>
-          Куда едем?
-        </Text>
-        <CustomInput
-          borderBlue
-          value={location}
-          placeholder='Локация'
-          onChange={setLocation}
+    <ScrollView>
+      {isResultsLoaded && (
+        <SmallSearchBlock
+          location={location}
+          countDays={countDays}
+          checkIn={checkIn}
+          backToBigSearchBlock={backToBigSearchBlock}
         />
-        <SafeAreaView>
-          {show && (
-            <DateTimePicker
-              testID='dateTimePicker'
-              value={datePicker}
-              mode='data'
-              onChange={onChange}
-            />
-          )}
-        </SafeAreaView>
-        <View className='flex flex-row justify-between'>
-          <View className='w-[47%]'>
-            <CustomDatapicker onPress={showDatepicker} value={data} />
-          </View>
-          <View className='w-[47%]'>
-            <CustomInput
-              isClock
-              borderBlue
-              value={countDays}
-              placeholder='Кол-во дней'
-              onChange={setCountDays}
-            />
-          </View>
+      )}
+      <View className='bg-[#F4F4F4] w-full h-full px-[16px] '>
+        <StatusBar />
+        {!isResultsLoaded && (
+          <BigSearchBlock
+            location={location}
+            setLocation={setLocation}
+            show={show}
+            datePicker={datePicker}
+            setDateInCalendar={setDateInCalendar}
+            showDatepicker={showDatepicker}
+            date={date}
+            countDays={countDays}
+            countDayNumber={countDayNumber}
+            searchHotels={searchHotels}
+          />
+        )}
+        <View>
+          <HotelsList />
         </View>
-        <CustomButton text='Найти' onPress={searchHotels} />
       </View>
-      <View>
-        <HotelsList />
-      </View>
-    </View>
+    </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  boxShadow: {
-    shadowColor: '#333333',
-    shadowOffset: {
-      width: 6,
-      height: 6,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-  },
-  androidShadow: {
-    elevation: 10,
-  },
-});

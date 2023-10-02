@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Image } from 'react-native';
 import yellowStar from '../assets/yellow-star.png';
-import greyStar from '../assets/grey-star.png';
+import whiteStar from '../assets/star-white.png';
 
 interface StarRatingProps {
   rating: number;
 }
 
-export const StarRating = ({ rating }: StarRatingProps) => {
+export const StarRatingForHotelPreview = ({ rating }: StarRatingProps) => {
   const renderStars = (num: number) => {
     const stars = [];
     // eslint-disable-next-line no-plusplus
@@ -15,8 +15,8 @@ export const StarRating = ({ rating }: StarRatingProps) => {
       stars.push(
         <Image
           key={i}
-          source={i < num ? yellowStar : greyStar}
-          className='h-[11px] w-[11.5px] mr-[8px]'
+          source={i < num ? yellowStar : whiteStar}
+          className='h-[16px] w-[17px] mr-[14px]'
         />
       );
     }

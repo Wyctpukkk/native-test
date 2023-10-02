@@ -9,6 +9,7 @@ interface CustomInputProps {
   errorValidate?: boolean;
   borderBlue?: boolean;
   isClock?: boolean;
+  isPassword?: boolean;
 }
 
 export const CustomInput = ({
@@ -18,6 +19,7 @@ export const CustomInput = ({
   errorValidate = false,
   borderBlue = false,
   isClock = false,
+  isPassword = false,
 }: CustomInputProps) => {
   const fontsLoaded: boolean = useFontLoader();
 
@@ -28,7 +30,8 @@ export const CustomInput = ({
     <View className='mt-[16px] relative'>
       {!isClock && (
         <TextInput
-          value={value}
+          secureTextEntry={isPassword}
+          defaultValue={value}
           className={`text-[#424242] p-[15px] rounded-[10px]
            bg-white font-["Gotham-normal"] border-solid border-[1px] ${
              errorValidate ? 'border-[#FF3B30]' : 'border-[#ffffff]'
@@ -40,7 +43,7 @@ export const CustomInput = ({
       {isClock && (
         <View>
           <TextInput
-            value={value}
+            defaultValue={value}
             className='text-[#424242] p-[10px] rounded-[10px]
            bg-white font-["Gotham-normal"] border-solid border-primary border-[1px] w-[100%]'
             placeholder={placeholder}
