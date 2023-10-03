@@ -12,6 +12,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StarRating } from '../components/UI/StarRating.tsx';
 import { useFontLoader } from '../hooks/useFontLoader.ts';
+import { getHotelsPhoto } from '../api/getHotelPhoto.ts';
 
 import bed from '../assets/bed.png';
 import user from '../assets/user.png';
@@ -45,6 +46,38 @@ export const HotelScreen = () => {
   const store = useSelector((state: initialProps) => state);
   const dispatch = useDispatch();
   const [isFavor, setIsFavor] = useState(false);
+  const [hotelPhotos, setHotelPhotos] = useState([]);
+  const [urlPhotos, setUrlPhotos] = useState([]);
+
+  useEffect(() => {
+    const fetchHotelPhotos = async () => {
+      try {
+        const response = await getHotelsPhoto(receivedProp.hotelId);
+        setHotelPhotos(response[receivedProp.hotelId]);
+      } catch (error) {
+        // Обработка ошибок
+      }
+    };
+
+    fetchHotelPhotos();
+  }, [receivedProp.hotelId]);
+
+  useEffect(() => {
+    const data = hotelPhotos.map((photo, index) => {
+      return {
+        id: index,
+        image: `https://photo.hotellook.com/image_v2/limit/${photo}/300/520.auto`,
+      };
+    });
+    setUrlPhotos(data);
+  }, [hotelPhotos]);
+
+  // const images = hotelPhotos?.map(
+  //   (photo: number) =>
+  //     `https://photo.hotellook.com/image_v2/limit/${photo}/300/520.auto`
+  // );
+
+  //     `https://photo.hotellook.com/image_v2/limit/8678014742/300/520.auto`
 
   useEffect(() => {
     if (store.favor.find((obj) => obj.hotelId === receivedProp.hotelId)) {
@@ -75,7 +108,7 @@ export const HotelScreen = () => {
         <View className='w-full h-[237px] rounded-[16px] bg-white overflow-hidden relative flex justify-end'>
           <Image
             className='absolute top-0 left-0 h-full w-full object-cover z-[-1]'
-            source={hotelOutside}
+            source={{ uri: urlPhotos[0]?.image }}
           />
           <View className='flex flex-col justify-between h-full'>
             <View className='w-full p-[16px] mt-[35px] flex flex-row justify-between'>
