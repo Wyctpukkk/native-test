@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   View,
   Text,
@@ -7,6 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { StarRating } from '../components/UI/StarRating.tsx';
 import { useFontLoader } from '../hooks/useFontLoader.ts';
 
@@ -14,11 +17,14 @@ import bed from '../assets/bed.png';
 import user from '../assets/user.png';
 import hotelOutside from '../assets/hotel-outside.png';
 import back from '../assets/back.png';
-import favorRed from '../assets/favor-red.png';
+import favorIcon from '../assets/favor.png';
+import favorIconRed from '../assets/favor-red.png';
 import scroll1 from '../assets/scroll1.png';
 import scroll2 from '../assets/scroll2.png';
 
 import { SliderItem } from '../components/SliderItem.tsx';
+import { type HotelInfo } from '../interfaces/apiInterface.ts';
+import { type initialProps } from '../redux/reducers.ts';
 
 const sliderData = [
   { id: 1, image: scroll1 },
@@ -28,6 +34,34 @@ const sliderData = [
 ];
 
 export const HotelScreen = () => {
+  const route = useRoute();
+  const receivedProp: HotelInfo = route.params?.hotelProps;
+  const navigation = useNavigation();
+
+  const getBackToList = () => {
+    navigation.navigate('MainScreen');
+  };
+
+  const store = useSelector((state: initialProps) => state);
+  const dispatch = useDispatch();
+  const [isFavor, setIsFavor] = useState(false);
+
+  useEffect(() => {
+    if (store.favor.find((obj) => obj.hotelId === receivedProp.hotelId)) {
+      setIsFavor(true);
+    }
+  }, [store]);
+
+  const checkIsFavor = () => {
+    if (!isFavor) {
+      dispatch({ type: 'ADD_FAVOR', payload: receivedProp });
+    } else {
+      dispatch({ type: 'DEL_FAVOR', payload: receivedProp });
+    }
+
+    setIsFavor(!isFavor);
+  };
+
   const fontsLoaded: boolean = useFontLoader();
 
   if (!fontsLoaded) {
@@ -40,19 +74,36 @@ export const HotelScreen = () => {
       <View>
         <View className='w-full h-[237px] rounded-[16px] bg-white overflow-hidden relative flex justify-end'>
           <Image
-            className='absolute top-0 left-0 h-full w-full mr-[9px] object-cover z-[-1]'
+            className='absolute top-0 left-0 h-full w-full object-cover z-[-1]'
             source={hotelOutside}
           />
           <View className='flex flex-col justify-between h-full'>
             <View className='w-full p-[16px] mt-[35px] flex flex-row justify-between'>
-              <Image className='h-[24px] w-[24px]' source={back} />
-              <Image className='h-[22px] w-[26px]' source={favorRed} />
+              <TouchableOpacity
+                onPress={() => {
+                  getBackToList();
+                }}
+              >
+                <Image className='h-[24px] w-[24px]' source={back} />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => {
+                  checkIsFavor();
+                }}
+              >
+                {isFavor ? (
+                  <Image className='h-[22px] w-[26px] ' source={favorIconRed} />
+                ) : (
+                  <Image className='h-[22px] w-[26px] ' source={favorIcon} />
+                )}
+              </TouchableOpacity>
             </View>
             <View className='p-[16px]'>
               <Text className='text-[#fff] text-[24px] font-["Gotham-medium"] tracking-[-1px] mb-[12px]'>
-                Moscow Marriott Grand Hotel
+                {receivedProp.hotelName}
               </Text>
-              <StarRating white rating={2} />
+              <StarRating white rating={receivedProp.stars} />
             </View>
           </View>
         </View>
@@ -104,7 +155,7 @@ export const HotelScreen = () => {
                 Цена за 1 ночь:
               </Text>
               <Text className='text-[#424242] text-[17px] font-["Gotham-medium"] tracking-[-1px]'>
-                23 924 ₽
+                {receivedProp.priceFrom} ₽
               </Text>
             </View>
             <View className='w-[50%]'>

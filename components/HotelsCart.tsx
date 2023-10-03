@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { useNavigation } from '@react-navigation/native';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+
 import { useFontLoader } from '../hooks/useFontLoader.ts';
-import previewHotel from '../assets/previewhotel.png';
 import { type HotelInfo } from '../interfaces/apiInterface.ts';
+import { type initialProps } from '../redux/reducers.ts';
 import { StarRating } from './UI/StarRating.tsx';
 import { clampString } from '../helpers/clampString.ts';
 
 import favorIcon from '../assets/favor.png';
 import favorIconRed from '../assets/favor-red.png';
-import { type initialProps } from '../redux/reducers.ts';
+import previewHotel from '../assets/previewhotel.png';
 
 interface HotelsCartProps {
   hotel: HotelInfo;
@@ -37,6 +38,12 @@ export const HotelsCart = ({ hotel }: HotelsCartProps) => {
     setIsFavor(!isFavor);
   };
 
+  const navigation = useNavigation();
+
+  const handleNavigate = () => {
+    navigation.navigate('HotelScreen', { hotelProps: hotel });
+  };
+
   const fontsLoaded: boolean = useFontLoader();
 
   if (!fontsLoaded) {
@@ -52,9 +59,15 @@ export const HotelsCart = ({ hotel }: HotelsCartProps) => {
 
         <View className='flex flex-col justify-between h-[57px]'>
           <View className='flex flex-row justify-end items-center'>
-            <Text className='text-[17px] font-["Gotham-medium"] font-[500] tracking-[-1.3px]'>
-              {clampString(hotel.hotelName, 29)}
-            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                handleNavigate();
+              }}
+            >
+              <Text className='text-[17px] font-["Gotham-medium"] font-[500] tracking-[-1.3px]'>
+                {clampString(hotel.hotelName, 29)}
+              </Text>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 checkIsFavor();

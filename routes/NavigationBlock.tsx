@@ -31,11 +31,18 @@ export const NavigationBlock = () => {
             options={{ headerShown: false }}
           />
         ) : (
-          <Stack.Screen
-            name='Start'
-            component={MainScreen}
-            options={{ headerShown: false }}
-          />
+          <>
+            <Stack.Screen
+              name='MainScreen'
+              component={MainScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name='HotelScreen'
+              component={HotelScreen}
+              options={{ headerShown: false }}
+            />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>
