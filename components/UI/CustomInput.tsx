@@ -45,7 +45,7 @@ export const CustomInput = ({
           <TextInput
             defaultValue={value}
             className='text-[#424242] p-[10px] rounded-[10px]
-           bg-white font-["Gotham-normal"] border-solid border-primary border-[1px] w-[100%]'
+           bg-white font-["Gotham-normal"] border-solid border-primary border-[1px] w-[100%] h-[50px]'
             placeholder={placeholder}
             onChangeText={onChange}
           />
