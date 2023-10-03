@@ -4,7 +4,6 @@ import { getHotelsList } from '../api/getHotelsList.ts';
 import { type initialProps } from './reducers.ts';
 import { type HotelInfo } from '../interfaces/apiInterface.ts';
 
-// Воркеры
 export function* loadHotelsList({
   payload,
 }: {
@@ -16,9 +15,7 @@ export function* loadHotelsList({
   };
 }): Generator {
   const { location, checkIn, checkOut } = payload;
-  const state: initialProps = yield select((store) => store);
 
-  alert(JSON.stringify(state.favor));
   try {
     const data = yield call(getHotelsList, location, checkIn, checkOut);
 
@@ -46,7 +43,26 @@ export function* delFavorite({ payload }: { payload: HotelInfo }) {
   yield put({ type: 'DEL_FAVOR_SUCCESS', payload: data });
 }
 
-// добавили юзера в storage
+export function* sortFavorite({ payload }: { payload: string }) {
+  const state: initialProps = yield select((store) => store);
+
+  const sorted = () => {
+    if (payload === 'priceFrom') {
+      return state.favor.sort((a, b) => b.priceFrom - a.priceFrom);
+    }
+    if (payload === 'stars') {
+      return state.favor.sort((a, b) => b.stars - a.stars);
+    }
+  };
+
+  try {
+    const data = sorted();
+    yield put({ type: 'SORT_FAVOR_SUCCESS', payload: data });
+  } catch (err) {
+    alert('ошибка сортировки');
+  }
+}
+
 export function* setUser({ payload }: { payload: string }) {
   try {
     yield AsyncStorage.setItem('user', payload);
@@ -54,7 +70,7 @@ export function* setUser({ payload }: { payload: string }) {
     alert('Не получилось добавить User в сторедж');
   }
 }
-// получили юзера из storage
+
 export function* checkUser(): Generator<any, void, string | null> {
   try {
     const user = yield AsyncStorage.getItem('user');
@@ -63,7 +79,7 @@ export function* checkUser(): Generator<any, void, string | null> {
     alert('Отсутствует User в сторедж (getItem)');
   }
 }
-// удалили юзера из storage
+
 export function* deleteUser(): Generator<any, void, string | null> {
   try {
     yield AsyncStorage.removeItem('user');
@@ -77,7 +93,7 @@ export default function* rootSaga() {
   yield takeEvery('LOAD_HOTELS', loadHotelsList);
   yield takeEvery('ADD_FAVOR', addFavorite);
   yield takeEvery('DEL_FAVOR', delFavorite);
-  // yield takeEvery('SORT_FAVOR', sortFavorite);
+  yield takeEvery('SORT_FAVOR', sortFavorite);
   yield takeEvery('SET_USER', setUser);
   yield takeEvery('CHECK_USER', checkUser);
   yield takeEvery('DEL_USER', deleteUser);

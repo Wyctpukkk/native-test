@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { StarRating } from '../components/StarRating.tsx';
+import { StarRating } from '../components/UI/StarRating.tsx';
 import { useFontLoader } from '../hooks/useFontLoader.ts';
 
 import bed from '../assets/bed.png';
@@ -27,7 +27,7 @@ const sliderData = [
   { id: 4, image: scroll2 },
 ];
 
-export const HotelPreview = () => {
+export const HotelScreen = () => {
   const fontsLoaded: boolean = useFontLoader();
 
   if (!fontsLoaded) {

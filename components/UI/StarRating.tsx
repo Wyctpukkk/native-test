@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Image } from 'react-native';
-import yellowStar from '../assets/yellow-star.png';
-import whiteStar from '../assets/star-white.png';
-import greyStar from '../assets/grey-star.png';
+import yellowStar from '../../assets/yellow-star.png';
+import whiteStar from '../../assets/star-white.png';
+import greyStar from '../../assets/grey-star.png';
 
 interface StarRatingProps {
   rating: number;
-  white: boolean;
+  white?: boolean;
 }
 
 export const StarRating = ({ rating, white }: StarRatingProps) => {

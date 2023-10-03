@@ -5,9 +5,9 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AuthScreen } from '../screens/AuthScreen.tsx';
-import { StartScreen } from '../screens/StartScreen.tsx';
+import { MainScreen } from '../screens/MainScreen.tsx';
 import { type initialProps } from '../redux/reducers.ts';
-import { HotelPreview } from '../screens/HotelPreview.tsx';
+import { HotelScreen } from '../screens/HotelScreen.tsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,7 +33,7 @@ export const NavigationBlock = () => {
         ) : (
           <Stack.Screen
             name='Start'
-            component={StartScreen}
+            component={MainScreen}
             options={{ headerShown: false }}
           />
         )}

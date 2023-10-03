@@ -5,7 +5,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useFontLoader } from '../hooks/useFontLoader.ts';
 import previewHotel from '../assets/previewhotel.png';
 import { type HotelInfo } from '../interfaces/apiInterface.ts';
-import { StarRating } from './StarRating.tsx';
+import { StarRating } from './UI/StarRating.tsx';
 import { clampString } from '../helpers/clampString.ts';
 
 import favorIcon from '../assets/favor.png';

@@ -1,6 +1,6 @@
 import { View, Image, Pressable, Text } from 'react-native';
-import { useFontLoader } from '../hooks/useFontLoader.ts';
-import calendar from '../assets/calendar.png';
+import { useFontLoader } from '../../hooks/useFontLoader.ts';
+import calendar from '../../assets/calendar.png';
 
 interface CustomDatapickerProps {
   value: string;

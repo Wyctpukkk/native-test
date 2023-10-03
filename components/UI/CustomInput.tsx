@@ -1,6 +1,6 @@
 import { TextInput, View, Image } from 'react-native';
-import { useFontLoader } from '../hooks/useFontLoader.ts';
-import clock from '../assets/clock.png';
+import { useFontLoader } from '../../hooks/useFontLoader.ts';
+import clock from '../../assets/clock.png';
 
 interface CustomInputProps {
   value: string;

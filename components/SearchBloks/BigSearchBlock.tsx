@@ -2,12 +2,12 @@
 import { View, Text, StyleSheet } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-import { useFontLoader } from '../hooks/useFontLoader.ts';
+import { useFontLoader } from '../../hooks/useFontLoader.ts';
 
-import { CustomInput } from './CustomInput.tsx';
-import { CustomButton } from './CustomButton.tsx';
-import { CustomDatapicker } from './CustomDatapicker.tsx';
-import { SignOut } from './SignOut.tsx';
+import { CustomInput } from '../UI/CustomInput.tsx';
+import { CustomButton } from '../UI/CustomButton.tsx';
+import { CustomDatapicker } from '../UI/CustomDatapicker.tsx';
+import { SignOut } from '../SignOut.tsx';
 
 interface BigSearchBlockProps {
   location: string;

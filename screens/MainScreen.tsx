@@ -1,7 +1,6 @@
 /* eslint-disable no-shadow */
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { type Dispatch } from 'redux';
 import { View, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
@@ -12,8 +11,8 @@ import {
 } from '../helpers/formatDataHelpers.ts';
 
 import { HotelsList } from '../components/HotelsList.tsx';
-import { BigSearchBlock } from '../components/BigSearchBlock.tsx';
-import { SmallSearchBlock } from '../components/SmallSearchBlock.tsx';
+import { BigSearchBlock } from '../components/SearchBloks/BigSearchBlock.tsx';
+import { SmallSearchBlock } from '../components/SearchBloks/SmallSearchBlock.tsx';
 
 interface StartedValuesInterface {
   location: string;
@@ -27,15 +26,20 @@ const startedValues: StartedValuesInterface = {
 
 const initialDate = new Date();
 
-export const StartScreen = () => {
+export const MainScreen = () => {
   const dispatch = useDispatch();
   const [location, setLocation] = useState<string>(startedValues.location);
   const [date, setDate] = useState<string>(formatDateDot(initialDate));
   const [checkIn, setCheckIn] = useState<string>(formatDateDash(initialDate));
   const [countDays, setCountDays] = useState<number>(startedValues.countDays);
-  const [checkOut, setCheckOut] = useState(dayCount(+countDays, checkIn));
-  const [show, setShow] = useState(false);
+  const [checkOut, setCheckOut] = useState<string>(
+    dayCount(+countDays, checkIn)
+  );
+
   const [isResultsLoaded, setIsResultsLoaded] = useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(false);
+  const [showFavorites, setShowFavorites] = useState<boolean>(false);
+  const [sortFavorites, setSortFavorites] = useState<boolean>(false);
 
   const countDayNumber = (number: string) => {
     if (number) {
@@ -44,22 +48,19 @@ export const StartScreen = () => {
     }
   };
 
-  // поиск новых отелей
   const loadHotels = (
-    dispatch: Dispatch,
     location: string,
     checkIn: string,
-    checkOut: string,
-    countDays: number
+    checkOut: string
   ): void => {
     dispatch({
       type: 'LOAD_HOTELS',
-      payload: { location, checkIn, checkOut, countDays },
+      payload: { location, checkIn, checkOut },
     });
   };
 
   useEffect(() => {
-    loadHotels(dispatch, location, checkIn, checkOut, countDays);
+    loadHotels(location, checkIn, checkOut);
   }, []);
 
   const setDateInCalendar = (selectedDate: Date | undefined) => {
@@ -77,11 +78,28 @@ export const StartScreen = () => {
 
   const backToBigSearchBlock = () => {
     setIsResultsLoaded(false);
+    setShowFavorites(false);
   };
 
   const searchHotels = () => {
-    loadHotels(dispatch, location, checkIn, checkOut, countDays);
+    loadHotels(location, checkIn, checkOut);
     setIsResultsLoaded(true);
+  };
+
+  const showPageFavorites = (value: boolean) => {
+    setShowFavorites(value);
+    setSortFavorites(false);
+    dispatch({ type: 'SORT_FAVOR', payload: 'stars' });
+  };
+
+  const changeSetSortFavorites = (value: boolean) => {
+    if (value) {
+      dispatch({ type: 'SORT_FAVOR', payload: 'priceFrom' });
+      setSortFavorites(true);
+    } else {
+      dispatch({ type: 'SORT_FAVOR', payload: 'stars' });
+      setSortFavorites(false);
+    }
   };
 
   return (
@@ -92,6 +110,8 @@ export const StartScreen = () => {
           countDays={countDays}
           checkIn={checkIn}
           backToBigSearchBlock={backToBigSearchBlock}
+          showPageFavorites={showPageFavorites}
+          showFavorites={showFavorites}
         />
       )}
       <View className='bg-[#F4F4F4] w-full h-full px-[16px] '>
@@ -111,7 +131,11 @@ export const StartScreen = () => {
           />
         )}
         <View>
-          <HotelsList />
+          <HotelsList
+            showFavorites={showFavorites}
+            sortFavorite={sortFavorites}
+            changeSetSortFavorites={changeSetSortFavorites}
+          />
         </View>
       </View>
     </ScrollView>

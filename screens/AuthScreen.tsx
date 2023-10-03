@@ -4,10 +4,10 @@ import { useDispatch } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 import { Image, Text, View } from 'react-native';
 
-import bgAuth from '../assets/bg.png';
-import { CustomInput } from '../components/CustomInput.tsx';
+import bgAuth from '../assets/bg.jpg';
+import { CustomInput } from '../components/UI/CustomInput.tsx';
 import { useFontLoader } from '../hooks/useFontLoader.ts';
-import { CustomButton } from '../components/CustomButton.tsx';
+import { CustomButton } from '../components/UI/CustomButton.tsx';
 import { validateUser } from '../helpers/validateUser.ts';
 
 export const AuthScreen = () => {
@@ -36,7 +36,7 @@ export const AuthScreen = () => {
     <View className='w-full h-full'>
       <StatusBar />
       <Image
-        className='absolute top-0 left-0 h-[120vh] w-full'
+        className='absolute top-0 left-0 h-[110vh] w-full'
         source={bgAuth}
       />
       <View className='mt-[141px] px-[16px] z-[10]'>
