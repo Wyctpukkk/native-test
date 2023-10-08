@@ -1,13 +1,14 @@
 import { View, Image, Pressable, Text } from 'react-native';
+
 import { useFontLoader } from '../../hooks/useFontLoader.ts';
 import calendar from '../../assets/calendar.png';
 
-interface CustomDatapickerProps {
+interface ICustomDatapicker {
   value: string;
   onPress: () => void;
 }
 
-export const CustomDatapicker = ({ value, onPress }: CustomDatapickerProps) => {
+export const CustomDatapicker = ({ value, onPress }: ICustomDatapicker) => {
   const fontsLoaded: boolean = useFontLoader();
 
   if (!fontsLoaded) {
@@ -24,6 +25,7 @@ export const CustomDatapicker = ({ value, onPress }: CustomDatapickerProps) => {
           {value}
         </Text>
       </Pressable>
+
       <Image
         className='absolute top-[12px] right-[10px] h-[24px] w-[24px]'
         source={calendar}

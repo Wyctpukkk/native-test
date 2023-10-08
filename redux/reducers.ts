@@ -1,16 +1,16 @@
-import { type HotelInfo } from '../interfaces/apiInterface.ts';
+import { type IHotelInfo } from '../interfaces/apiInterface.ts';
 
-export interface initialProps {
-  hotels: HotelInfo[];
+export interface InitialInterface {
+  hotels: IHotelInfo[];
   location: string;
   checkIn: string;
   checkOut: string;
   count: string;
-  favor: HotelInfo[];
+  favor: IHotelInfo[];
   user: string;
 }
 
-const initial: initialProps = {
+const initial: InitialInterface = {
   hotels: [],
   location: '',
   checkIn: '',
@@ -20,7 +20,14 @@ const initial: initialProps = {
   user: '',
 };
 
-export default function reducer(state = initial, action) {
+export default function reducer(
+  // eslint-disable-next-line default-param-last
+  state = initial,
+  action: {
+    type: any;
+    payload: { location: any; checkIn: any; checkOut: any; count: any };
+  }
+) {
   switch (action.type) {
     case 'LOAD_HOTELS': {
       const { location, checkIn, checkOut, count } = action.payload;

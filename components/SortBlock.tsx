@@ -1,8 +1,9 @@
 import { View, Text } from 'react-native';
+
 import { CustomButton } from './UI/CustomButton.tsx';
 import { useFontLoader } from '../hooks/useFontLoader.ts';
 
-interface SortBlockProps {
+interface ISortBlock {
   sortFavorite: boolean;
   changeSetSortFavorites: (value: boolean) => void;
 }
@@ -10,7 +11,7 @@ interface SortBlockProps {
 export const SortBlock = ({
   sortFavorite,
   changeSetSortFavorites,
-}: SortBlockProps) => {
+}: ISortBlock) => {
   const fontsLoaded: boolean = useFontLoader();
 
   if (!fontsLoaded) {
@@ -21,6 +22,7 @@ export const SortBlock = ({
       <Text className='text-[#000] text-[14px] font-["Gotham-medium"]'>
         Сортировать по
       </Text>
+
       <View className='flex flex-row'>
         <CustomButton
           isSortFavorite
@@ -30,6 +32,7 @@ export const SortBlock = ({
             changeSetSortFavorites(false);
           }}
         />
+
         <CustomButton
           isSortFavorite
           sortFavoriteActive={sortFavorite}

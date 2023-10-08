@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
   View,
   Text,
@@ -7,25 +8,32 @@ import {
   Image,
   FlatList,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation, useRoute } from '@react-navigation/native';
+
 import { StarRating } from '../components/UI/StarRating.tsx';
+
 import { useFontLoader } from '../hooks/useFontLoader.ts';
 import { getHotelsPhoto } from '../api/getHotelPhoto.ts';
+import { type IHotelInfo } from '../interfaces/apiInterface.ts';
+import { type InitialInterface } from '../redux/reducers.ts';
 
 import bed from '../assets/bed.png';
 import user from '../assets/user.png';
-import hotelOutside from '../assets/hotel-outside.png';
 import back from '../assets/back.png';
 import favorIcon from '../assets/favor.png';
 import favorIconRed from '../assets/favor-red.png';
 import scroll1 from '../assets/scroll1.png';
 import scroll2 from '../assets/scroll2.png';
-
 import { SliderItem } from '../components/SliderItem.tsx';
-import { type HotelInfo } from '../interfaces/apiInterface.ts';
-import { type initialProps } from '../redux/reducers.ts';
+import { CustomButton } from '../components/UI/CustomButton.tsx';
+
+interface IUrlPhoto {
+  id: number;
+  image: string;
+}
 
 const sliderData = [
   { id: 1, image: scroll1 },
@@ -36,34 +44,35 @@ const sliderData = [
 
 export const HotelScreen = () => {
   const route = useRoute();
-  const receivedProp: HotelInfo = route.params?.hotelProps;
+  const receivedProp: IHotelInfo = route.params?.hotelProps;
   const navigation = useNavigation();
 
   const getBackToList = () => {
-    navigation.navigate('MainScreen');
+    navigation.navigate('MainScreen' as never);
   };
 
-  const store = useSelector((state: initialProps) => state);
+  const favor = useSelector((state: InitialInterface) => state.favor);
   const dispatch = useDispatch();
-  const [isFavor, setIsFavor] = useState(false);
+  const [isFavor, setIsFavor] = useState<boolean>(false);
   const [hotelPhotos, setHotelPhotos] = useState([]);
-  const [urlPhotos, setUrlPhotos] = useState([]);
+  const [urlPhotos, setUrlPhotos] = useState<IUrlPhoto[]>([]);
 
   useEffect(() => {
     const fetchHotelPhotos = async () => {
       try {
-        const response = await getHotelsPhoto(receivedProp.hotelId);
+        const response = await getHotelsPhoto(`${receivedProp.hotelId}`);
         setHotelPhotos(response[receivedProp.hotelId]);
       } catch (error) {
-        // Обработка ошибок
+        alert('Ошибка получения фото отелей с сервера');
       }
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fetchHotelPhotos();
   }, [receivedProp.hotelId]);
 
   useEffect(() => {
-    const data = hotelPhotos.map((photo, index) => {
+    const data = hotelPhotos.map((photo: string, index: number) => {
       return {
         id: index,
         image: `https://photo.hotellook.com/image_v2/limit/${photo}/300/520.auto`,
@@ -72,18 +81,11 @@ export const HotelScreen = () => {
     setUrlPhotos(data);
   }, [hotelPhotos]);
 
-  // const images = hotelPhotos?.map(
-  //   (photo: number) =>
-  //     `https://photo.hotellook.com/image_v2/limit/${photo}/300/520.auto`
-  // );
-
-  //     `https://photo.hotellook.com/image_v2/limit/8678014742/300/520.auto`
-
   useEffect(() => {
-    if (store.favor.find((obj) => obj.hotelId === receivedProp.hotelId)) {
+    if (favor.find((obj) => obj.hotelId === receivedProp.hotelId)) {
       setIsFavor(true);
     }
-  }, [store]);
+  }, [favor]);
 
   const checkIsFavor = () => {
     if (!isFavor) {
@@ -157,17 +159,17 @@ export const HotelScreen = () => {
             </View>
           </View>
 
-          <View className='mb-[24px]'>
+          <View>
             <Text className='text-[#000] text-[14px] font-["Gotham-medium"] mb-[8px] max-w-[300px]'>
               Фото номера
             </Text>
             <FlatList
-              data={sliderData}
+              data={urlPhotos}
               renderItem={({ item }) => <SliderItem item={item} />}
               horizontal
-              showsHorizontalScrollIndicator
               pagingEnabled
               keyExtractor={(item) => item.id.toString()}
+              showsVerticalScrollIndicator={false}
             />
           </View>
 
@@ -175,11 +177,11 @@ export const HotelScreen = () => {
             <Text className='text-[#000] text-[14px] font-["Gotham-medium"] mb-[8px]'>
               Что включено
             </Text>
-            <TouchableOpacity className='flex items-center justify-center bg-[#6aaf7533] rounded-[4px] h-[23px] w-[86px]'>
+            <View className='flex items-center justify-center bg-[#6aaf7533] rounded-[4px] h-[23px] w-[86px]'>
               <Text className='text-[10px] text-[#6AAF75] font-["Gotham-normal"]'>
                 Завтрак
               </Text>
-            </TouchableOpacity>
+            </View>
           </View>
 
           <View className='bg-white rounded-[16px] p-[16px] flex flex-row justify-between items-center'>
@@ -191,12 +193,17 @@ export const HotelScreen = () => {
                 {receivedProp.priceFrom} ₽
               </Text>
             </View>
+
             <View className='w-[50%]'>
-              <TouchableOpacity className='flex items-center justify-center bg-primary rounded-[10px] h-[45px] w-full'>
-                <Text className='text-[14px] text-white font-["Gotham-medium"]'>
-                  Забронировать
-                </Text>
-              </TouchableOpacity>
+              <CustomButton
+                isCustom
+                customDiv='flex w-[50%] items-center justify-center bg-primary rounded-[10px] h-[45px] w-full'
+                customText='text-[14px] text-white font-["Gotham-medium"]'
+                text='Забронировать'
+                onPress={() => {
+                  Alert.alert('Поздравляю', 'Отель забронирован');
+                }}
+              />
             </View>
           </View>
         </View>

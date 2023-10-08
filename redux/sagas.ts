@@ -1,8 +1,11 @@
+/* eslint-disable no-alert */
 import { select, call, put, takeEvery } from 'redux-saga/effects';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { getHotelsList } from '../api/getHotelsList.ts';
-import { type initialProps } from './reducers.ts';
-import { type HotelInfo } from '../interfaces/apiInterface.ts';
+import { type InitialInterface } from './reducers.ts';
+import { type IHotelInfo } from '../interfaces/apiInterface.ts';
 
 export function* loadHotelsList({
   payload,
@@ -25,7 +28,7 @@ export function* loadHotelsList({
   }
 }
 
-export function* addFavorite({ payload }: { payload: HotelInfo }) {
+export function* addFavorite({ payload }: { payload: IHotelInfo }) {
   try {
     yield put({ type: 'ADD_FAVOR_SUCCESS', payload });
   } catch (err) {
@@ -33,18 +36,18 @@ export function* addFavorite({ payload }: { payload: HotelInfo }) {
   }
 }
 
-export function* delFavorite({ payload }: { payload: HotelInfo }) {
-  const state: initialProps = yield select((store) => store);
+export function* delFavorite({ payload }: { payload: IHotelInfo }) {
+  const state: InitialInterface = yield select((store) => store);
 
   const data = state.favor.filter(
-    (obj: HotelInfo) => obj.hotelId !== payload.hotelId
+    (obj: IHotelInfo) => obj.hotelId !== payload.hotelId
   );
 
   yield put({ type: 'DEL_FAVOR_SUCCESS', payload: data });
 }
 
 export function* sortFavorite({ payload }: { payload: string }) {
-  const state: initialProps = yield select((store) => store);
+  const state: InitialInterface = yield select((store) => store);
 
   const sorted = () => {
     if (payload === 'priceFrom') {

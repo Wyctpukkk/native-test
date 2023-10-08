@@ -23,6 +23,7 @@ export const SignOut = () => {
       <Text className='text-[24px] font-["Gotham-bold"] font-[700]'>
         Simple Hotel Check
       </Text>
+
       <TouchableOpacity
         onPress={() => {
           logOutUser();

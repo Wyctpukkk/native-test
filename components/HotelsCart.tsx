@@ -4,8 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 
 import { useFontLoader } from '../hooks/useFontLoader.ts';
-import { type HotelInfo } from '../interfaces/apiInterface.ts';
-import { type initialProps } from '../redux/reducers.ts';
+import { type IHotelInfo } from '../interfaces/apiInterface.ts';
+import { type InitialInterface } from '../redux/reducers.ts';
 import { StarRating } from './UI/StarRating.tsx';
 import { clampString } from '../helpers/clampString.ts';
 
@@ -14,19 +14,19 @@ import favorIconRed from '../assets/favor-red.png';
 import previewHotel from '../assets/previewhotel.png';
 
 interface HotelsCartProps {
-  hotel: HotelInfo;
+  hotel: IHotelInfo;
 }
 
 export const HotelsCart = ({ hotel }: HotelsCartProps) => {
-  const store = useSelector((state: initialProps) => state);
+  const favor = useSelector((state: InitialInterface) => state.favor);
   const dispatch = useDispatch();
   const [isFavor, setIsFavor] = useState(false);
 
   useEffect(() => {
-    if (store.favor.find((obj) => obj.hotelId === hotel.hotelId)) {
+    if (favor.find((obj) => obj.hotelId === hotel.hotelId)) {
       setIsFavor(true);
     }
-  }, [store]);
+  }, [favor]);
 
   const checkIsFavor = () => {
     if (!isFavor) {
@@ -68,6 +68,7 @@ export const HotelsCart = ({ hotel }: HotelsCartProps) => {
                 {clampString(hotel.hotelName, 29)}
               </Text>
             </TouchableOpacity>
+
             <TouchableOpacity
               onPress={() => {
                 checkIsFavor();
@@ -86,6 +87,7 @@ export const HotelsCart = ({ hotel }: HotelsCartProps) => {
               )}
             </TouchableOpacity>
           </View>
+
           <View className='flex flex-row items-center justify-end'>
             <StarRating rating={hotel.stars} />
             <Text className='text-[#878787] text-[13px] font-["Gotham-normal"] tracking-[-1px]'>
@@ -94,11 +96,14 @@ export const HotelsCart = ({ hotel }: HotelsCartProps) => {
           </View>
         </View>
       </View>
+
       <View className='w-full h-[2px] bg-[#F4F4F4] my-[8px]' />
+
       <View className='flex flex-row items-center justify-end'>
         <Text className='text-[#878787] text-[13px] font-["Gotham-normal"] tracking-[-1px]'>
           Цена за 1 ночь:
         </Text>
+
         <Text className='ml-[10px] text-[17px] font-["Gotham-medium"] font-[500] tracking-[-1px]'>
           {hotel.priceFrom} ₽
         </Text>

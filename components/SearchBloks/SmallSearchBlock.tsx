@@ -1,9 +1,10 @@
 import React from 'react';
 import { View } from 'react-native';
+
 import { CustomButton } from '../UI/CustomButton.tsx';
 import { finallyRequestInString } from '../../helpers/finallyRequestInString.ts';
 
-interface SmallSearchBlockProps {
+interface ISmallSearchBlock {
   location: string;
   countDays: number;
   checkIn: string;
@@ -19,7 +20,7 @@ export const SmallSearchBlock = ({
   backToBigSearchBlock,
   showPageFavorites,
   showFavorites,
-}: SmallSearchBlockProps) => {
+}: ISmallSearchBlock) => {
   const currentRequest = () => {
     const requestString = finallyRequestInString(location, checkIn, countDays);
     return requestString;
@@ -44,6 +45,7 @@ export const SmallSearchBlock = ({
             }}
           />
         </View>
+
         <View className='w-[45%]'>
           <CustomButton
             isSmallBlock

@@ -1,8 +1,9 @@
 import { TextInput, View, Image } from 'react-native';
+
 import { useFontLoader } from '../../hooks/useFontLoader.ts';
 import clock from '../../assets/clock.png';
 
-interface CustomInputProps {
+interface ICustomInput {
   value: string;
   placeholder: string;
   onChange: (value: string) => void;
@@ -20,7 +21,7 @@ export const CustomInput = ({
   borderBlue = false,
   isClock = false,
   isPassword = false,
-}: CustomInputProps) => {
+}: ICustomInput) => {
   const fontsLoaded: boolean = useFontLoader();
 
   if (!fontsLoaded) {
@@ -40,6 +41,7 @@ export const CustomInput = ({
           onChangeText={onChange}
         />
       )}
+
       {isClock && (
         <View>
           <TextInput
@@ -49,6 +51,7 @@ export const CustomInput = ({
             placeholder={placeholder}
             onChangeText={onChange}
           />
+
           <Image
             className='absolute top-[12px] right-[10px] h-[24px] w-[24px]'
             source={clock}

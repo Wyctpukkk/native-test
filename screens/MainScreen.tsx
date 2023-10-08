@@ -1,6 +1,7 @@
 /* eslint-disable no-shadow */
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+
 import { View, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
@@ -14,12 +15,12 @@ import { HotelsList } from '../components/HotelsList.tsx';
 import { BigSearchBlock } from '../components/SearchBloks/BigSearchBlock.tsx';
 import { SmallSearchBlock } from '../components/SearchBloks/SmallSearchBlock.tsx';
 
-interface StartedValuesInterface {
+interface IStartedValues {
   location: string;
   countDays: number;
 }
 
-const startedValues: StartedValuesInterface = {
+const startedValues: IStartedValues = {
   location: 'Москва',
   countDays: 1,
 };

@@ -9,7 +9,7 @@ import { CustomButton } from '../UI/CustomButton.tsx';
 import { CustomDatapicker } from '../UI/CustomDatapicker.tsx';
 import { SignOut } from '../SignOut.tsx';
 
-interface BigSearchBlockProps {
+interface IBigSearchBlock {
   location: string;
   setLocation: (value: string) => void;
   show: boolean;
@@ -33,7 +33,7 @@ export const BigSearchBlock = ({
   countDays,
   countDayNumber,
   searchHotels,
-}: BigSearchBlockProps) => {
+}: IBigSearchBlock) => {
   const fontsLoaded: boolean = useFontLoader();
 
   if (!fontsLoaded) {

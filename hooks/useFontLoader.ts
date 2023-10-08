@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -12,7 +13,11 @@ export function useFontLoader() {
 
   useEffect(() => {
     async function prepare() {
-      await SplashScreen.preventAutoHideAsync();
+      try {
+        await SplashScreen.preventAutoHideAsync();
+      } catch (error) {
+        alert('Ошибка в загрузке шрифтов');
+      }
     }
     prepare();
 

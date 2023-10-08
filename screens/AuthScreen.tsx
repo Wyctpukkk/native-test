@@ -6,8 +6,8 @@ import { Image, Text, View } from 'react-native';
 
 import bgAuth from '../assets/bg.jpg';
 import { CustomInput } from '../components/UI/CustomInput.tsx';
-import { useFontLoader } from '../hooks/useFontLoader.ts';
 import { CustomButton } from '../components/UI/CustomButton.tsx';
+import { useFontLoader } from '../hooks/useFontLoader.ts';
 import { validateUser } from '../helpers/validateUser.ts';
 
 export const AuthScreen = () => {

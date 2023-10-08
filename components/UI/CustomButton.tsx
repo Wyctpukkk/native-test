@@ -1,10 +1,12 @@
 import { TouchableOpacity, Text, View, Image } from 'react-native';
+
 import { useFontLoader } from '../../hooks/useFontLoader.ts';
+
 import lupa from '../../assets/lupa.png';
 import sortGrey from '../../assets/sort-grey.png';
 import sortWhite from '../../assets/sort-white.png';
 
-interface CustomButtonProps {
+interface ICustomButton {
   text: string;
   onPress: () => void;
   isSortFavorite?: boolean;
@@ -29,7 +31,7 @@ export const CustomButton = ({
   isSmallBlock = false,
   isActive = false,
   isSearchRequest = false,
-}: CustomButtonProps) => {
+}: ICustomButton) => {
   const fontsLoaded: boolean = useFontLoader();
 
   if (!fontsLoaded) {
@@ -56,6 +58,7 @@ export const CustomButton = ({
           >
             {text}
           </Text>
+
           {sortFavoriteActive ? (
             <Image className='h-[16px] w-[16px]' source={sortWhite} />
           ) : (
@@ -63,11 +66,13 @@ export const CustomButton = ({
           )}
         </TouchableOpacity>
       )}
+
       {isCustom && (
         <TouchableOpacity onPress={onPress} className={customDiv}>
           <Text className={customText}>{text}</Text>
         </TouchableOpacity>
       )}
+
       {isStandart && (
         <TouchableOpacity
           onPress={onPress}
@@ -78,6 +83,7 @@ export const CustomButton = ({
           </Text>
         </TouchableOpacity>
       )}
+
       {isSmallBlock && (
         <TouchableOpacity
           onPress={onPress}
@@ -90,6 +96,7 @@ export const CustomButton = ({
           </Text>
         </TouchableOpacity>
       )}
+
       {isSearchRequest && (
         <TouchableOpacity
           className='text-[#424242] p-[10px] pl-[40px] rounded-[10px] mt-[18px]
@@ -100,6 +107,7 @@ export const CustomButton = ({
             className='absolute top-[15px] left-[15px] h-[16px] w-[16px]'
             source={lupa}
           />
+
           <Text className='text-[14px] text-[#000] font-["Gotham-normal"] '>
             {text}
           </Text>

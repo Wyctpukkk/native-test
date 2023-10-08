@@ -1,20 +1,20 @@
 type PricePercentile = Record<string, number>;
 
-interface Geo {
+interface IGeo {
   lat: number;
   lon: number;
 }
 
-interface Location {
+interface ILocation {
   state: string | null;
-  geo: Geo;
+  geo: IGeo;
   country: string;
   name: string;
 }
 
-export interface HotelInfo {
+export interface IHotelInfo {
   pricePercentile: PricePercentile;
-  location: Location;
+  location: ILocation;
   hotelId: number;
   priceFrom: number;
   hotelName: string;

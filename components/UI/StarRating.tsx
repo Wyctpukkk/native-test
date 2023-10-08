@@ -1,15 +1,16 @@
 import React from 'react';
 import { View, Image } from 'react-native';
+
 import yellowStar from '../../assets/yellow-star.png';
 import whiteStar from '../../assets/star-white.png';
 import greyStar from '../../assets/grey-star.png';
 
-interface StarRatingProps {
+interface IStarRating {
   rating: number;
   white?: boolean;
 }
 
-export const StarRating = ({ rating, white }: StarRatingProps) => {
+export const StarRating = ({ rating, white }: IStarRating) => {
   const starImage = white ? whiteStar : greyStar;
   const starClassName = white
     ? 'min-h-[16px] min-w-[17px] mr-[14px]'
